@@ -1,0 +1,21 @@
+module.exports = {
+    "env": {
+        "browser": false,
+        "node": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-console": ["error", {
+            "allow": ["error", "info", "warn"]
+        }]
+    }
+};

@@ -1,0 +1,33 @@
+{
+  "name": "anywhere",
+  "version": "1.0.0",
+  "description": "NodeJs static Web server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/app.js",
+    "lint": "eslint ."
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bTurnin/anywhere.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bTurnin/anywhere/issues"
+  },
+  "homepage": "https://github.com/bTurnin/anywhere#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "pre-commit": "^1.2.2"
+  },
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "chalk": "^2.4.2"
+  }
+}
