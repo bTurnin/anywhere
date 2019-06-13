@@ -7,8 +7,12 @@ const stat = promisify(fs.stat)
 const readdir = promisify(fs.readdir)
 const readFile = promisify(fs.readFile)
 
-// 模板
-const template = require('art-template')
+
+const template = require('art-template') // 模板
+const mime = require('mime') // 获取对应扩展名mime类型
+
+const compress = require('./compress')
+const range = require('./range')
 
 
 module.exports = async (req, res, filePath) => {
@@ -18,15 +22,32 @@ module.exports = async (req, res, filePath) => {
 
     // 当前为 文件资源
     if (stats.isFile()) {
-      console.info('文件')
+      
+      const type = mime.getType(filePath)
+      console.info('文件', type)
       res.statusCode = 200
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+      res.setHeader('Content-Type', `${type}; charset=utf-8`)
       // 管道 读取文件
-      fs.createReadStream(filePath).pipe(res).on('close', () => {
-        res.end()
-        return
-      })
+      // fs.createReadStream(filePath).pipe(res).on('close', () => {
+      //   res.end()
+      //   return
+      // })
+      let rs;
 
+      const {code, start, end} = range(stats.size, req, res)
+      if ( code === 200 ) {
+        res.statusCode = 200
+        rs = fs.createReadStream(filePath)
+      } else {
+        res.statusCode = 206
+        rs = fs.createReadStream(filePath, {start, end})
+      }
+      
+      // 压缩
+      if (filePath.match(config.compress)) {
+        rs = compress(rs, req, res)
+      }
+      rs.pipe(res)
     }
 
     // 当前为 文件夹
