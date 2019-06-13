@@ -1,7 +1,6 @@
 const { promisify } = require('util')
 const path = require('path')
 const fs = require('fs')
-const config = require('../config/defaultConfig')
 /* 包装异步方法 */
 const stat = promisify(fs.stat)
 const readdir = promisify(fs.readdir)
@@ -15,7 +14,7 @@ const compress = require('./compress')
 const range = require('./range')
 const isFresh = require('./cache')
 
-module.exports = async (req, res, filePath) => {
+module.exports = async (req, res, filePath, config) => {
   try {
     // 判断当前的资源类型
     const stats = await stat(filePath)
