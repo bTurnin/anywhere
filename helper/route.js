@@ -13,7 +13,7 @@ const mime = require('mime') // 获取对应扩展名mime类型
 
 const compress = require('./compress')
 const range = require('./range')
-
+const isFresh = require('./cache')
 
 module.exports = async (req, res, filePath) => {
   try {
@@ -32,8 +32,13 @@ module.exports = async (req, res, filePath) => {
       //   res.end()
       //   return
       // })
+      
+      if (isFresh(stats, req, res)) {
+        res.statusCode = 304
+        res.end()
+        return
+      }
       let rs;
-
       const {code, start, end} = range(stats.size, req, res)
       if ( code === 200 ) {
         res.statusCode = 200
